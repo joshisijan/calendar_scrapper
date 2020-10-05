@@ -1,7 +1,8 @@
-const fs = require("fs");
+var fs = require('fs');
 const prompt = require("prompt-sync")();
 const puppetter = require("puppeteer");
 const $ = require("cheerio");
+const { resolve } = require("path");
 
 const baseUrlNepali = "https://www.hamropatro.com/calendar/";
 const baseUrlEnglish = "https://english.hamropatro.com/calendar/";
@@ -52,13 +53,19 @@ grabByYear = () =>
           // getting data
           let urlForYear = `${baseUrl}${year}/${j}`;
 
-          console.log(`Generating data for year ${year} month ${j} (${language}) ...`);
+          console.log(
+            `Generating data for year ${year} month ${j} (${language}) ...`
+          );
           await page.goto(urlForYear);
 
-          console.log(`Processing page for year ${year} month ${j} (${language}) ...`);
+          console.log(
+            `Processing page for year ${year} month ${j} (${language}) ...`
+          );
           const html = await page.content();
 
-          console.log(`Grabbing data from content for year ${year} month ${j} (${language}) ...`);
+          console.log(
+            `Grabbing data from content for year ${year} month ${j} (${language}) ...`
+          );
           let content = $(".calendar .dates li", html);
           content.each((i, el) => {
             let index;
@@ -137,8 +144,8 @@ grabAll = () =>
       //base url for year
       console.log("Loading new page...");
       const page = await browser.newPage();
-      let minYear = prompt('Enter first year: ');
-      let maxYear = prompt('Enter last Year: ');
+      let minYear = prompt("Enter first year: ");
+      let maxYear = prompt("Enter last Year: ");
       for (let year = minYear; year <= maxYear; year++) {
         coreJsonData = {
           year: year,
@@ -174,13 +181,19 @@ grabAll = () =>
 
             console.log(`Grabbing for year ${year} month ${j} (${language})`);
 
-            console.log(`Generating data for year ${year} month ${j} (${language}) ...`);
+            console.log(
+              `Generating data for year ${year} month ${j} (${language}) ...`
+            );
             await page.goto(urlForYear);
 
-            console.log(`Processing page for year ${year} month ${j} (${language}) ...`);
+            console.log(
+              `Processing page for year ${year} month ${j} (${language}) ...`
+            );
             const html = await page.content();
 
-            console.log(`Grabbing data from content for year ${year} month ${j} (${language}) ...`);
+            console.log(
+              `Grabbing data from content for year ${year} month ${j} (${language}) ...`
+            );
             let content = $(".calendar .dates li", html);
             content.each((i, el) => {
               let index;
@@ -254,14 +267,42 @@ grabAll = () =>
     }
   })();
 
+mergeYears = () => {
+  console.log('Reading directory...');
+  fs.readdir(
+    './data/years', 
+    {},
+    (err, files) => {
+      let index = 1;
+      let totalFiles = files.length;
+      let allYears = [];
+      console.log('Merging files...');
+      console.log(`Total files: ${totalFiles}`);
+      files.forEach(file => {
+        console.log(`Merging ${index} / ${totalFiles}`);
+        let content = fs.readFileSync(`./data/years/${file.toString()}`, 'utf8');
+        content = JSON.parse(content);
+        allYears.push(content);
+        index++;
+      });
+      console.log('Merging complete');
+      console.log('Saving Merged file...');
+      fs.writeFile('./data/data.json', JSON.stringify(allYears),"utf8", () => {});
+      console.log('Merging and saving complete');
+    }
+  );
+};
 console.log("Hello!");
 console.log("Options:");
 console.log("1. Grab all");
 console.log("2. Grab specific year");
-console.log("3. Exit");
+console.log("3. Merge all years");
+console.log("4. Exit");
 answer = prompt("Select from option above: ");
 if (answer == 1) {
   grabAll();
 } else if (answer == 2) {
   grabByYear();
+} else if (answer == 3) {
+  mergeYears();
 }
