@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require("fs");
 const prompt = require("prompt-sync")();
 const puppetter = require("puppeteer");
 const $ = require("cheerio");
@@ -122,7 +122,12 @@ grabByYear = () =>
       }
       coreJsonData = JSON.stringify(coreJsonData);
       console.log("Writting to JSON file...");
-      fs.writeFile(`./data/years/${year}.json`, coreJsonData, "utf8", () => {});
+      fs.writeFile(
+        `./docs/data/years/${year}.json`,
+        coreJsonData,
+        "utf8",
+        () => {}
+      );
       console.log("Finishing up...");
       console.log("Closing browser...");
       await browser.close();
@@ -251,7 +256,7 @@ grabAll = () =>
         coreJsonData = JSON.stringify(coreJsonData);
         console.log(`Writting year ${year} to JSON file...`);
         fs.writeFile(
-          `./data/years/${year}.json`,
+          `./docs/data/years/${year}.json`,
           coreJsonData,
           "utf8",
           () => {}
@@ -268,30 +273,35 @@ grabAll = () =>
   })();
 
 mergeYears = () => {
-  console.log('Reading directory...');
-  fs.readdir(
-    './data/years', 
-    {},
-    (err, files) => {
-      let index = 1;
-      let totalFiles = files.length;
-      let allYears = [];
-      console.log('Merging files...');
-      console.log(`Total files: ${totalFiles}`);
-      files.forEach(file => {
-        console.log(`Merging ${index} / ${totalFiles}`);
-        let content = fs.readFileSync(`./data/years/${file.toString()}`, 'utf8');
-        content = JSON.parse(content);
-        allYears.push(content);
-        index++;
-      });
-      console.log('Merging complete');
-      console.log('Saving Merged file...');
-      fs.writeFile('./data/data.json', JSON.stringify(allYears),"utf8", () => {});
-      console.log('Merging and saving complete');
-    }
-  );
+  console.log("Reading directory...");
+  fs.readdir("./docs/data/years", {}, (err, files) => {
+    let index = 1;
+    let totalFiles = files.length;
+    let allYears = [];
+    console.log("Merging files...");
+    console.log(`Total files: ${totalFiles}`);
+    files.forEach((file) => {
+      console.log(`Merging ${index} / ${totalFiles}`);
+      let content = fs.readFileSync(
+        `./docs/data/years/${file.toString()}`,
+        "utf8"
+      );
+      content = JSON.parse(content);
+      allYears.push(content);
+      index++;
+    });
+    console.log("Merging complete");
+    console.log("Saving Merged file...");
+    fs.writeFile(
+      "./docs/data/data.json",
+      JSON.stringify(allYears),
+      "utf8",
+      () => {}
+    );
+    console.log("Merging and saving complete");
+  });
 };
+
 console.log("Hello!");
 console.log("Options:");
 console.log("1. Grab all");
