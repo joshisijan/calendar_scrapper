@@ -44,6 +44,7 @@ grabByYear = () =>
         for (let j = 1; j <= 12; j++) {
           tempMonthData = {
             month: j,
+            monthName: "",
             monthData: [],
           };
 
@@ -62,6 +63,15 @@ grabByYear = () =>
             `Processing page for year ${year} month ${j} (${language}) ...`
           );
           const html = await page.content();
+
+          // get month name
+          console.log("Grabbing month name...");
+          let monthContent = $("select#selectMonth option", html);
+          monthContent.each((i, el) => {
+            if (i == j - 1) {
+              tempMonthData.monthName = $(el).text().trim();
+            }
+          });
 
           console.log(
             `Grabbing data from content for year ${year} month ${j} (${language}) ...`
@@ -104,6 +114,7 @@ grabByYear = () =>
                 .text()
                 .trim();
               tempMonthData.monthData.push({
+                index: i,
                 nepali: $(".nep", el).text().trim(),
                 english: $(".eng", el).text().trim(),
                 tithi: $(".tithi", el).text().trimEnd(),
@@ -175,6 +186,7 @@ grabAll = () =>
           for (let j = 1; j <= 12; j++) {
             tempMonthData = {
               month: j,
+              monthName: "",
               monthData: [],
             };
 
@@ -195,6 +207,15 @@ grabAll = () =>
               `Processing page for year ${year} month ${j} (${language}) ...`
             );
             const html = await page.content();
+
+            // get month name
+            console.log("Grabbing month name...");
+            let monthContent = $("select#selectMonth option", html);
+            monthContent.each((i, el) => {
+              if (i == j - 1) {
+                tempMonthData.monthName = $(el).text().trim();
+              }
+            });
 
             console.log(
               `Grabbing data from content for year ${year} month ${j} (${language}) ...`
@@ -237,6 +258,7 @@ grabAll = () =>
                   .text()
                   .trim();
                 tempMonthData.monthData.push({
+                  index: i,
                   nepali: $(".nep", el).text().trim(),
                   english: $(".eng", el).text().trim(),
                   tithi: $(".tithi", el).text().trimEnd(),
