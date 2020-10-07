@@ -100,7 +100,7 @@ grabByYear = () =>
               else if (n == 2) return "tuesday";
               else if (n == 3) return "wednesday";
               else if (n == 4) return "thursday";
-              else if (n == 5) return "fryday";
+              else if (n == 5) return "friday";
               else return "saturday";
             };
 
@@ -244,7 +244,7 @@ grabAll = () =>
                 else if (n == 2) return "tuesday";
                 else if (n == 3) return "wednesday";
                 else if (n == 4) return "thursday";
-                else if (n == 5) return "fryday";
+                else if (n == 5) return "friday";
                 else return "saturday";
               };
 
