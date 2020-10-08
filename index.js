@@ -21,7 +21,7 @@ grabByYear = () =>
 
       // asking to enter desired year
       let year = prompt("Enter year: ");
-      coreJsonData.year = year;
+      coreJsonData.year = parseInt(year.toString());
       //base url for year
       console.log("Loading new page...");
       const page = await browser.newPage();
